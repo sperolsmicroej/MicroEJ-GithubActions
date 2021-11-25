@@ -1,1 +1,37 @@
+name: Example of Github Actions to build a MicroEJ Platform and Virtual Device
 
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: microej/sdk:5.4.1
+      options: -uroot
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: MicroEJ/Platform-STMicroelectronics-STM32F7508-DK
+          ref: 1.3.2
+          path: Platform-STMicroelectronics-STM32F7508-DK
+      
+      - uses: actions/checkout@v2
+        with:
+          repository: MicroEJ/Demo-Widget
+          ref: 7.3.0
+          path: Demo-Widget
+
+      - name: build the platform
+        run: mmm build -Declipse.home="/home/jenkins/ECLIPSE"
+        working-directory: Platform-STMicroelectronics-STM32F7508-DK/stm32f7508_freertos-configuration/
+      
+      - name: build the Virtual Device
+        run: mmm publish release -D"platform-loader.target.platform.dir=${GITHUB_WORKSPACE}/Platform-STMicroelectronics-STM32F7508-DK/STM32F7508-Platform-CM7hardfp_GCC48-1.3.2/source" -D"virtual.device.sim.only=SET"
+        working-directory: Demo-Widget/com.microej.demo.widget
+
+      - name: Upload Virtual Device
+        uses: actions/upload-artifact@v2
+        with:
+          name: WidgetVDE
+          path: /root/.ivy2/repository/com/microej/demo/widget/7.3.0/widget-7.3.0.zip
