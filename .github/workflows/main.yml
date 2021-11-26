@@ -23,8 +23,10 @@ jobs:
           path: Demo-Widget
 
       - name: build the platform
-        run: mmm build -Declipse.home="${ECLIPSE_HOME}"
+        run: mmm build
         working-directory: Platform-STMicroelectronics-STM32F7508-DK/stm32f7508_freertos-configuration/
+        env:
+          JAVA_OPTS: -Declipse.home="${ECLIPSE_HOME}"
       
       - name: build the Virtual Device
         run: mmm publish release -D"platform-loader.target.platform.dir=${GITHUB_WORKSPACE}/Platform-STMicroelectronics-STM32F7508-DK/STM32F7508-Platform-CM7hardfp_GCC48-1.3.2/source" -D"virtual.device.sim.only=SET"
