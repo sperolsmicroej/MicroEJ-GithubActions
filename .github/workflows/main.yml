@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: microej/sdk:5.4.1
-      options: -uroot
 
     steps:
       - uses: actions/checkout@v2
