@@ -23,7 +23,7 @@ jobs:
           path: Demo-Widget
 
       - name: build the platform
-        run: mmm build -Declipse.home="/home/jenkins/ECLIPSE"
+        run: mmm build -Declipse.home="${ECLIPSE_HOME}"
         working-directory: Platform-STMicroelectronics-STM32F7508-DK/stm32f7508_freertos-configuration/
       
       - name: build the Virtual Device
